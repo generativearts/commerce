@@ -3,33 +3,32 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
-    {% load thumbnail %}
-    <ul>
+    <div class="row row-cols-1 row-cols-md-4 ">
+        <div class="col mb-4">
         {% for item in items %}
-            <li>{{ item }}</li>
-        {% empty %}
-            <li> No auction items </li>
-        {% endfor %}
-    </ul>
-
-    <div class="card-deck">
-        {% for item in items %}
-        <div class="card">
-            <div class="col-lg-4 col-6">
-                <img class="card-img-top img-thumbnail" src="{{ MEDIA_URL}}{{ item.item_image.url }}" alt="Card image cap">
+        <div class="card h-120">
+            <img class="card-img-top rounded mx-auto d-block" src="{{ MEDIA_URL}}{{ item.item_image.url }}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title text-truncate">{{ item.item_name }}</h5>
+                <p class="card-text text-truncate">{{ item.item_description }}</p>
+                <div class="container">
+                    <div class="row">
+                        <div class="col"><p><strong>${{ item.item_price }}</strong></p></div>
+                        <div class="col text-muted text-right"><p><strong> bids</strong></p></div>
+                      <div class="w-100"></div>
+                    </div>
+                  </div>
             </div>
-                <div class="card-body">
-            <h5 class="card-title">{{ item.item_name }}</h5>
-            <p class="card-text">{{ item.item_description }}</p>
+            
             <div class="card-footer">
-                <p class="card-text"><small class="text-muted">Created {{ item.created}}</small></p>
-                <p class="card-text"><small class="text-muted">Expires {{ item.expires}}</small></p>
+              <small class="text-muted">Created {{ item.created }}</small>
+              <small class="text-danger">Expires {{ item.expires }}</small>
             </div>
-        </div>
+          </div>        
         </div>
         {% empty %}
             <li> No auction items </li>
         {% endfor %}        
       </div>
+    </div>
 {% endblock %}
