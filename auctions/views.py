@@ -1,14 +1,23 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
 from .models import User
+from .models import Comment
+from .models import Item
+from .forms import CommentForm
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    items = Item.objects.order_by('expires')
+    for item in items:
+        print(item.item_image)
+        print(item.item_image.url)
+    #items = Item.objects
+    context = {'items': items,}
+    return render(request, "auctions/index.html", context)
 
 
 def login_view(request):
@@ -61,3 +70,28 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+def post_detail(request, slug):
+    template_name = 'post_detail.html'
+    post = get_object_or_404(Comment, slug=slug)
+    comments = post.comments.filter(active=True)
+    new_comment = None
+    # Comment posted
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+
+            # Create Comment object but don't save to database yet
+            new_comment = comment_form.save(commit=False)
+            # Assign the current post to the comment
+            new_comment.post = post
+            # Save the comment to the database
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+
+    return render(request, template_name, {'post': post,
+                                           'comments': comments,
+                                           'new_comment': new_comment,
+                                           'comment_form': comment_form})

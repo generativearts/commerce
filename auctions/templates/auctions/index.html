@@ -4,4 +4,32 @@
     <h2>Active Listings</h2>
 
     TODO
+    {% load thumbnail %}
+    <ul>
+        {% for item in items %}
+            <li>{{ item }}</li>
+        {% empty %}
+            <li> No auction items </li>
+        {% endfor %}
+    </ul>
+
+    <div class="card-deck">
+        {% for item in items %}
+        <div class="card">
+            <div class="col-lg-4 col-6">
+                <img class="card-img-top img-thumbnail" src="{{ MEDIA_URL}}{{ item.item_image.url }}" alt="Card image cap">
+            </div>
+                <div class="card-body">
+            <h5 class="card-title">{{ item.item_name }}</h5>
+            <p class="card-text">{{ item.item_description }}</p>
+            <div class="card-footer">
+                <p class="card-text"><small class="text-muted">Created {{ item.created}}</small></p>
+                <p class="card-text"><small class="text-muted">Expires {{ item.expires}}</small></p>
+            </div>
+        </div>
+        </div>
+        {% empty %}
+            <li> No auction items </li>
+        {% endfor %}        
+      </div>
 {% endblock %}
