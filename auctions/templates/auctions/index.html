@@ -2,10 +2,11 @@
 
 {% block body %}
   <h2>Active Listings</h2>
+  
     <div class="card-deck ">
       {% for item in items %}
         <div class="col-3">
-          <div class="card h-120 mb-3">
+          <div class="card h-60 mb-3">
             <img class="card-img-top img-thumbnail" src="{{ MEDIA_URL}}{{ item.item_image.url }}" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title text-truncate">{{ item.item_name }}</h5>
