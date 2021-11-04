@@ -18,12 +18,12 @@ class User(AbstractUser):
                             max_length=255, blank=False,
                             null=False, unique=True,
                             help_text="User name")
-    phonenumber = models.CharField(max_length=10, unique=True,)
+    phonenumber = models.CharField(max_length=10, unique=True, default="380")
     pass
 
 
 class Category(models.Model):
-    category_id = models.AutoField(primary_key=True, default="", editable=False)
+    category_id = models.AutoField(primary_key=True, editable=False)
     name = models.CharField(max_length=200)
 
     def __str__(self):
