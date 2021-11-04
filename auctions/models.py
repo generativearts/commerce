@@ -14,11 +14,16 @@ def path_and_rename(instance, filename):
 
 
 class User(AbstractUser):
-    #phonenumber = models.CharField(max_length=10)
+    username = models.CharField(primary_key=True, 
+                            max_length=255, blank=False,
+                            null=False, unique=True,
+                            help_text="User name")
+    phonenumber = models.CharField(max_length=10, unique=True,)
     pass
 
 
 class Category(models.Model):
+    category_id = models.AutoField(primary_key=True, default="", editable=False)
     name = models.CharField(max_length=200)
 
     def __str__(self):
@@ -26,8 +31,8 @@ class Category(models.Model):
 
 
 class Item(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     item_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)    
     item_name = models.CharField(max_length=255, blank=False, null=False,
                             help_text="Enter a short description of the item")
     item_description = models.TextField(max_length=1200, blank=False, null=False,
@@ -46,17 +51,19 @@ class Item(models.Model):
         return f'{self.item_id}: {self.item_name}' 
 
 
-class Auction(models.Model):
-    seller = models.ForeignKey(User, on_delete=models.CASCADE)
-    item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
-    item_name = models.CharField(max_length=255, blank=True, null=True)
-    winner = models.ForeignKey(User, related_name='Auction_Winner',
-                                blank=True, null=True, on_delete=models.CASCADE)
-    created = models.DateTimeField(editable=False, null=True)
-    expires = models.DateTimeField(editable=False, null=True)
+class Bid(models.Model):
+    bid_id = models.AutoField(primary_key=True)
+    bid = models.DecimalField(max_digits=20, decimal_places=2,
+                                default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    created = models.DateTimeField(editable=False, null=True,
+                                auto_now_add=True)
+
 
 
 class Comment(models.Model):
+    comment_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     body = models.TextField(max_length=600, blank=False, null=False,
