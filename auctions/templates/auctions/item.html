@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+  <h2>Active Listings</h2>
+  
+    <div class="card-deck ">
+      {% for item in items %}
+        <div class="col-3">
+          <div class="card h-60 mb-3">
+            <img class="card-img-top img-thumbnail" src="{{ MEDIA_URL}}{{ item.item_image.url }}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title text-truncate">{{ item.item_name }}</h5>
+              <p class="card-text text-truncate">{{ item.item_description }}</p>
+              <div class="container">
+                <div class="row">
+                    <div class="col">
+                      <p><strong>${{ item.item_price }}</strong></p>
+                    </div>
+                    <div class="col text-muted text-right">
+                      <p><strong> bids</strong></p>
+                    </div>
+                  <div class="w-100"></div>
+                </div>
+              </div>
+            </div>            
+            <div class="card-footer">
+              <small class="text-muted">Created {{ item.created }}</small>
+              <small class="text-danger">Expires {{ item.expires }}</small>
+            </div>        
+          </div>
+        </div>
+      {% empty %}
+          <li> No auction items </li>
+      {% endfor %}        
+      
+    </div>
+{% endblock %}

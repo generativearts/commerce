@@ -7,5 +7,5 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
-    path('<slug:slug>/', views.post_detail, name='post_detail'),
+    #path('<slug:slug>/', views.post_detail, name='post_detail'),
 ]

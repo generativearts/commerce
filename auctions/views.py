@@ -20,6 +20,14 @@ def index(request):
     return render(request, "auctions/index.html", context)
 
 
+def new_page(request):
+    pass
+
+
+def item_page(request):
+    pass
+
+
 def login_view(request):
     if request.method == "POST":
 
