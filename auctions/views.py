@@ -8,7 +8,7 @@ from .models import User
 from .models import Comment
 from .models import Item
 from .models import Category
-from .forms import CommentForm
+from .forms import CommentForm, NewItemForm
 
 
 def index(request):
@@ -23,11 +23,29 @@ def index(request):
 
 def new_item(request):
     if request.method == "POST":
+        form = NewItemForm(request.POST)
+        if form.is_valid:
+            #print('form', form)
+            print(request.POST.get('item_category'))
+            item_name = form.cleaned_data.get('item_name')
+            item_description = form.cleaned_data.get('item_description')
+            print(request.POST.get('item_category'))
+            item_category  = form.cleaned_data.get('item_category')
+            item_bid  = form.cleaned_data.get('item_bid')
+            print('item_name', item_name,
+                    'item_description', item_description,
+                    "item_category", item_category,
+                    'ittem_bid', item_bid)
         return render(request, "auctions/new_item.html")
     else:
         categoryes = Category.objects.order_by('category_id')
-        print(categoryes)
-        context = {'categoryes': categoryes}
+        '''for c in categoryes:
+            print(c.name)'''
+        form = NewItemForm()
+        #print('Category', form.item_category)
+        #print(form.cleaned_data.get('item_category'))
+        context = {'categoryes': categoryes,
+                    }
         return render(request, "auctions/new_item.html",
                     context)
 
