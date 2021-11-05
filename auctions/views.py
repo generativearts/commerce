@@ -7,6 +7,7 @@ from django.urls import reverse
 from .models import User
 from .models import Comment
 from .models import Item
+from .models import Category
 from .forms import CommentForm
 
 
@@ -20,8 +21,16 @@ def index(request):
     return render(request, "auctions/index.html", context)
 
 
-def new_page(request):
-    pass
+def new_item(request):
+    if request.method == "POST":
+        return render(request, "auctions/new_item.html")
+    else:
+        categoryes = Category.objects.order_by('category_id')
+        print(categoryes)
+        context = {'categoryes': categoryes}
+        return render(request, "auctions/new_item.html",
+                    context)
+
 
 
 def item_page(request):
