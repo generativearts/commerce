@@ -2,23 +2,30 @@
 
 {% block body %}
   <h2>Active Listings</h2>
-  
-    <div class="card-deck ">
+    <div class="card-deck container-fluid">
       {% for item in items %}
+      
         <div class="col-3">
-          <div class="card h-60 mb-3">
-            {% if item.item_image %}
-            <img class="card-img-top img-thumbnail" src="{{ MEDIA_URL}}{{ item.item_image.url }}" alt="Card image cap">
-            {% else %}
-              <img class="card-img-top img-thumbnail" src="https://fakeimg.pl/350x350/?text=No Photo&font=lobster">
-            {% endif %}            
+          <div class="card h-120 my-1 text-dark">
+            <a class="text-dark" href="p/{{ item.item_id }}">
+              {% if item.item_image %}
+                <img class="card-img-top img-fluid"
+                  src="{{ MEDIA_URL}}{{ item.item_image.url }}"
+                  href="p/{{ item.item_id }}"
+                  alt="Card image cap">
+              {% else %}
+                <img class="card-img-top img-thumbnail" src="https://fakeimg.pl/350x350/?text=No Photo&font=lobster">
+              {% endif %}  
+            </a>          
             <div class="card-body">
-              <h5 class="card-title text-truncate">{{ item.item_name }}</h5>
+              <a class="text-dark" href="p/{{ item.item_id }}">
+                <h5 class="card-title card-link text-truncate">{{ item.item_name }}</h5>
+              </a>
               <p class="card-text text-truncate">{{ item.item_description }}</p>
               <div class="container">
                 <div class="row">
                     <div class="col">
-                      <p><strong>${{ item.item_price }}</strong></p>
+                      <p><strong>${{ item.item_bid }}</strong></p>
                     </div>
                     <div class="col text-muted text-right">
                       <p><strong> bids</strong></p>
@@ -26,16 +33,29 @@
                   <div class="w-100"></div>
                 </div>
               </div>
-            </div>            
-            <div class="card-footer">
+            </div>
+            <a class="btn btn-primary" href="p/{{ item.item_id }}" role="button">Make bids</a>            
+            <div class="card-footer">              
               <small class="text-muted">Created {{ item.created }}</small>
               <small class="text-danger">Expires {{ item.expires }}</small>
             </div>        
           </div>
         </div>
+
       {% empty %}
           <li> No auction items </li>
-      {% endfor %}        
+      {% endfor %}             
       
     </div>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      </ul>
+    </nav>
+
 {% endblock %}

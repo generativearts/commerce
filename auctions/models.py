@@ -37,7 +37,9 @@ class Item(models.Model):
                             help_text="Enter a short description of the item")
     item_description = models.TextField(max_length=1200, blank=False, null=False,
                             help_text="Enter a brief description of the item")
-    item_image = models.ImageField(upload_to=path_and_rename, height_field=None, width_field=None, max_length=100)
+    item_image = models.ImageField(upload_to=path_and_rename,
+                        null= True, blank=True,
+                        height_field=None, width_field=None, max_length=200)
     item_category = models.ForeignKey(Category, on_delete=models.CASCADE)
     item_bid = models.DecimalField(max_digits=20, decimal_places=2,
                                 default=0.0)

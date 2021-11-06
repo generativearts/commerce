@@ -47,7 +47,13 @@ class NewItemForm(forms.Form):
                                 'step': 1,
                                 'title': "Place Your bid here"
                             }, ))
-    item_image = forms.FileField(required=True,)
+    item_image = forms.FileField(required=True,
+                        widget=forms.ClearableFileInput(
+                            attrs={"id": "item_image",
+                                "name": "item_image",
+                                "class": "custom-file-input",
+                                "accept": "image/*",
+                            }, ))
     
 
 """ class NewItemForm(forms.Form):

@@ -22,7 +22,7 @@ def index(request):
 def new_item(request):
     if request.method == "POST":
         form = NewItemForm(request.POST, request.FILES)
-        print(request.POST)
+        print('request.FILES', request.FILES)
         if form.is_valid():
             print('item_name', form.cleaned_data.get('item_name'),
                     'item_description', form.cleaned_data.get('item_description'),
@@ -61,8 +61,11 @@ def new_item(request):
 
 
 
-def item_page(request):
-    pass
+def item_page(request, item_id=None):
+    item = Item.objects.get(item_id=item_id)
+    context = {'item': item,}
+    return render(request, "auctions/item.html",
+                    context)
 
 
 def login_view(request):
