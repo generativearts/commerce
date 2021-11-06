@@ -1,6 +1,6 @@
 from .models import Comment
 from django import forms
-from .models import Category
+from .models import Category, Item
 
 
 class CommentForm(forms.ModelForm):
@@ -9,16 +9,46 @@ class CommentForm(forms.ModelForm):
         fields = ('user', 'item', 'body')
 
 class NewItemForm(forms.Form):
-    item_name = forms.CharField(required=True, widget=forms.TextInput())
-    item_description = forms.CharField(required=True, widget=forms.Textarea())
-    CHOICES = (('Option 1', 'Option 1'),('Option 2', 'Option 2'),)
-    CHOICES = tuple(c.name for c in Category.objects.order_by('category_id'))
-    print('CHOICES', CHOICES)
-    item_category = forms.ChoiceField(choices=CHOICES)
-    print('item_category', item_category)
-    item_bid = forms.DecimalField(required=True, )
-
-
+    item_name = forms.CharField(required=True,
+                        widget=forms.TextInput(
+                            attrs={'value': '',
+                                "class": "form-control",
+                                "id": "item_name",
+                                "name": "item_name",
+                                "aria-describedby": "item_name",
+                                'placeholder': 'Some like Iphone 12',
+                                'maxlength': Item.item_name.field.max_length,
+                                }))
+    item_description = forms.CharField(required=True, 
+                        widget=forms.Textarea(
+                            attrs={'value': '',
+                                    "id": "item_description",
+                                    "name": "item_description",
+                                    "rows": 10,
+                                    "class": "form-control",
+                                    'placeholder': 'Place description here',
+                                    'maxlength': Item.item_description.field.max_length,
+                                    }))
+    item_category = forms.ModelChoiceField(required=True,
+                        queryset=Category.objects.order_by('category_id'), 
+                        widget=forms.Select(
+                            attrs={"class": "form-control w-auto",
+                                "id": "item_category",
+                                "name": "item_category",
+                            }), )
+    item_bid = forms.DecimalField(required=True, 
+                        widget=forms.NumberInput(
+                            attrs={"id": "item_description",
+                                "name": "item_description",
+                                "class": "form-control w-25",
+                                "inputmode": "decimal",
+                                'placeholder': 0.00,
+                                'min': 0,
+                                'step': 1,
+                                'title': "Place Your bid here"
+                            }, ))
+    item_image = forms.FileField(required=True,)
+    
 
 """ class NewItemForm(forms.Form):
     item_name = forms.CharField(required=True, 

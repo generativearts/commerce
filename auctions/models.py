@@ -39,8 +39,8 @@ class Item(models.Model):
                             help_text="Enter a brief description of the item")
     item_image = models.ImageField(upload_to=path_and_rename, height_field=None, width_field=None, max_length=100)
     item_category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    item_price = models.DecimalField(max_digits=20, decimal_places=2,
-                                default=0.1)
+    item_bid = models.DecimalField(max_digits=20, decimal_places=2,
+                                default=0.0)
     created = models.DateTimeField(editable=False, null=True,
                                 auto_now_add=True)
     expires = models.DateTimeField(editable=True, null=True,
@@ -54,7 +54,7 @@ class Item(models.Model):
 class Bid(models.Model):
     bid_id = models.AutoField(primary_key=True)
     bid = models.DecimalField(max_digits=20, decimal_places=2,
-                                default=0)
+                                default=0.0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     created = models.DateTimeField(editable=False, null=True,

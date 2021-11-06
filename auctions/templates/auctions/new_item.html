@@ -2,49 +2,49 @@
 
 {% block body %}
   <h2>Create new auction</h2>
+  {% if message %}
+        <div>{{ message }}</div>
+  {% endif %}
+  <!-- <div class="form-group sm-6">
+      {{ form |safe }}
+  </div> -->
   <form method="POST">
     {% csrf_token %}
     <div class="form-group">      
       <label for="item_name">Auction name</label>
-      <input type="text" class="form-control" id="item_name" name="item_name" required placeholder="Some like Iphone 13">
+      {{ form.item_name |safe}}
     </div>
     <div class="form-group">
       <label for="item_bid">Stard bid</label>
-      <input type="number" class="form-control" id="item_bid" name="item_bid"
-      required  placeholder="0.00"  min="0" value="0" step="0.01"
-      title="Currency" pattern="^\d+(?:\.\d{1,2})?$"
-      onblur="this.parentNode.parentNode.style.backgroundColor=/^\d+(?:\.\d{1,2})?$/.test(this.value)?'inherit':'red'">
+      {{ form.item_bid |safe}}
     </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+    <!-- <div class="input-group mb-3 w-50">
+      <div class="input-group-prepend ">
+        <span class="input-group-text" id="FileAddon01">Upload</span>
       </div>
       <div class="custom-file">
-        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+        <input type="file" class="custom-file-input" name="item_image" id="item_image" aria-describedby="inputGroupFileAddon01">
+        <label class="custom-file-label" for="item_image">Choose file</label>
       </div>
-    </div>    
-    <div class="form-group sm-6">
+    </div>  -->
+
+    <div class="input-group mb-3 w-50">
+      <div class="input-group-prepend ">
+        <span class="input-group-text" id="FileAddon01">Upload</span>
+      </div>
+      <div class="custom-file">
+        {{ form.item_image |safe}}
+        <label class="custom-file-label" for="item_image">Choose file</label>
+      </div>
+    </div> 
+
+    <div class="form-group sm-6" title="Please select category">
       <label for="item_category">Category select</label>
-      <select class="form-control" id="item_category" name="item_category">
-        <option>---------</option>
-        {% for category in categoryes %}
-        <option>{{ category.name }}</option>
-        {% empty %}
-          <li>---------</li>
-        {% endfor %} 
-      </select>
+      {{ form.item_category |safe}}
     </div>
-    <!-- <div class="form-group sm-6">
-      <label for="item_category">Category select</label>
-      {{ form.item_category |safe }}
-    </div> -->
     <div class="form-group">
       <label for="formGroupExampleInput2">Description</label>
-      <textarea type="text" class="form-control" rows="3" maxlength="1200"
-            id="item_description" name="item_description" required
-            placeholder="Place description here">
-      </textarea>
+      {{ form.item_description |safe}}
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
