@@ -17,7 +17,8 @@ class NewItemForm(forms.Form):
                                 "name": "item_name",
                                 "aria-describedby": "item_name",
                                 'placeholder': 'Some like Iphone 12',
-                                'maxlength': Item.item_name.field.max_length,
+                                #'maxlength': Item.item_name.max_length,
+                                'maxlength': Item._meta.get_field('item_name').max_length,
                                 }))
     item_description = forms.CharField(required=True, 
                         widget=forms.Textarea(
@@ -27,7 +28,8 @@ class NewItemForm(forms.Form):
                                     "rows": 10,
                                     "class": "form-control",
                                     'placeholder': 'Place description here',
-                                    'maxlength': Item.item_description.field.max_length,
+                                    #'maxlength': Item.item_description.max_length,
+                                    'maxlength': Item._meta.get_field('item_description').max_length,
                                     }))
     item_category = forms.ModelChoiceField(required=True,
                         queryset=Category.objects.order_by('category_id'), 
@@ -79,7 +81,8 @@ class CommentForm(forms.Form):
                                     "rows": 10,
                                     "class": "form-control",
                                     'placeholder': 'Place description here',
-                                    'maxlength': Item.item_description.field.max_length,
+                                    #'maxlength': Item.item_description.field.max_length,
+                                    'maxlength': Item._meta.get_field('item_description').max_length,
                                     }))
 
                                     
