@@ -14,7 +14,7 @@ CHARSET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
 
 def path_and_rename(instance, filename):
     upload_to = 'auctions/static/itemimage'
-    filename = f'{instance.item_id}_{filename}'    
+    filename = f'{instance.item_UUID}_{filename}'    
     return os.path.join(upload_to, filename)
 
 
