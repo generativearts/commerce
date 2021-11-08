@@ -5,6 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 
+import uuid
+
 from .models import User
 from .models import Comment
 from .models import Item
@@ -14,58 +16,72 @@ from .forms import CommentForm, NewItemForm
 
 def index(request):
     items = Item.objects.order_by('expires')
+    for item in items:
+        print(item)
     context = {'items': items,}
     return render(request, "auctions/index.html", context)
 
 
 
 def new_item(request):
-    if request.method == "POST":
-        form = NewItemForm(request.POST, request.FILES)
-        print('request.FILES', request.FILES)
-        if form.is_valid():
-            print('item_name', form.cleaned_data.get('item_name'),
-                    'item_description', form.cleaned_data.get('item_description'),
-                    "item_category", form.cleaned_data.get('item_category'),
-                    'ittem_bid', form.cleaned_data.get('item_bid'),
-                    'item_image', form.cleaned_data.get('item_image'),
-                    )
-            obj = Item(item_image=request.FILES['item_image'])
-            obj.user = request.user
-            obj.item_name = form.cleaned_data.get('item_name')
-            obj.item_description = form.cleaned_data.get('item_description')
-            obj.item_category = form.cleaned_data.get('item_category')
-            obj.item_bid = form.cleaned_data.get('item_bid')
-            obj.item_image = form.cleaned_data.get('item_image')
-            
-            '''instance = Item(item_image=request.FILES['item_image'])
-            instance.save()'''
-            obj.save()
-            messages.success(request, 'New Auction Created')
-        else:
-            print("Form invalid")
-            messages.error(request, 'Error creating Auction. Not valid form')
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = NewItemForm(request.POST, request.FILES)
+            print('request.FILES', request.FILES)
+            if form.is_valid():
+                print('item_name', form.cleaned_data.get('item_name'),
+                        'item_description', form.cleaned_data.get('item_description'),
+                        "item_category", form.cleaned_data.get('item_category'),
+                        'ittem_bid', form.cleaned_data.get('item_bid'),
+                        'item_image', form.cleaned_data.get('item_image'),
+                        )
+                obj = Item(item_image=request.FILES['item_image'])
+                obj.user = request.user
+                obj.item_name = form.cleaned_data.get('item_name')
+                obj.item_description = form.cleaned_data.get('item_description')
+                obj.item_category = form.cleaned_data.get('item_category')
+                obj.item_bid = form.cleaned_data.get('item_bid')
+                obj.item_image = form.cleaned_data.get('item_image')
+                
+                '''instance = Item(item_image=request.FILES['item_image'])
+                instance.save()'''
+                obj.save()
+                messages.success(request, 'New Auction Created')
+            else:
+                print("Form invalid")
+                messages.error(request, 'Error creating Auction. Not valid form')
+                return render(request, "auctions/new_item.html",
+                        context = {'form': form,})
             return render(request, "auctions/new_item.html",
-                    context = {'form': form,})
-        return render(request, "auctions/new_item.html",
-                    context = {'form': form,
-                    "message": "Form Submitted"})
+                        context = {'form': form,
+                        "message": "Form Submitted"})
+        else:
+            categoryes = Category.objects.order_by('category_id')
+            form = NewItemForm()
+            context = {'categoryes': categoryes,
+                        'form': form}
+            messages.info(request, 'Test message')
+            return render(request, "auctions/new_item.html",
+                        context)
     else:
-        categoryes = Category.objects.order_by('category_id')
-        form = NewItemForm()
-        context = {'categoryes': categoryes,
-                    'form': form}
-        messages.info(request, 'Test message')
-        return render(request, "auctions/new_item.html",
+        return render(request, "auctions/login.html")
+
+
+def item_page(request, item_UUID=None):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = NewItemForm(request.POST)
+            if form.is_valid():
+                obj = Item()
+                obj.user = request.user
+        else:
+            item = Item.objects.get(item_UUID=item_UUID)
+            context = {'item': item,}
+            return render(request, "auctions/item.html",
                     context)
-
-
-
-def item_page(request, item_id=None):
-    item = Item.objects.get(item_id=item_id)
-    context = {'item': item,}
-    return render(request, "auctions/item.html",
-                    context)
+    else:
+        messages.error(request, 'You are not signed')
+        return render(request, "auctions/login.html")
 
 
 def login_view(request):

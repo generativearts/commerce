@@ -8,6 +8,6 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("new_item", views.new_item, name="new_item"),
-    path("p/<str:item_id>", views.item_page, name="item_page"),
+    path("p/<str:item_UUID>", views.item_page, name="item_page"),
     #path('<slug:slug>/', views.post_detail, name='post_detail'),
 ]

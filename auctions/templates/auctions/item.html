@@ -1,31 +1,95 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-  <h2>Active Listings</h2>
+  {% if item %}
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-lg-4 order-lg-2 order-1 ">
+          <div class="align-middle ">
+            <img class="img-fluid" 
+            src="{{ MEDIA_URL}}{{ item.item_image.url }}" alt="">
+          </div>
+      </div>
+      <div class="col-lg-6 order-3">
+        <div class="product_description">
+            <div class="product_name">
+              <h5>{{ item.item_name }}</h5>              
+            </div>
+            <div class="product-rating">
+              <span class="badge badge-success"><i class="fa fa-star"></i> 4.5 Star</span> <span class="rating-review">35 Ratings & 45 Reviews</span>
+            </div>
+            <div>
+              <span class="product_price">${{ item.item_bid }}</span> <strike class="product_discount"> <span style='color:black'>₹ 2,000<span> </strike>
+            </div>
+            <hr class="singleline">
+            <form class="form-inline">
+              <div class="container jumbotron">
+                <div class="row">
+                  <div class="col-md-3 col-sm">
+                    <p><strong>Current bid:</strong></p>
+                  </div>
+                  <div class="col-md-4 col-sm">
+                    <p><strong>${{ item.item_bid }}</strong></p>
+                  </div>
+                  <div class="col-md-4 col-sm">
+                    <p><strong>[bids]</strong></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 col-sm">
+                  </div>
+                  <div class="col-md-4 col-sm">
+                    <input class="form-control w-100" type="text" placeholder="Default input">
+                  </div>
+                  <div class="col-md-4 col-sm">
+                    <button type="submit" class="btn btn-primary mb-2">Place bid</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 col-sm">
+                  </div>
+                  <div class="col-md-4 col-sm">
+                    <p><small>Enter US ${{ item.item_bid|add:1.00 }} or more</small></p>
+                  </div>
+                  <div class="col-md-4 col-sm">
+                    <button class="btn btn-success">
+                      <i class="fas fa-star"></i>
+                    </button> 
+                  </div>
+                </div>
+              </div>
+            </form>          
+              
+          </div>
+        </div>
+      </div>
+      <hr class="singleline">
+      <div> 
+        <h5>Description</h5> 
+      </div>
+      <div> 
+        <p>{{ item.item_description }}</p>
+      </div>
+      <hr class="singleline">
+
+      <div class="row border-bottom">
+          <div class="col-md-6">
+            <h5>Comments</h5> 
+          </div>
+          <div class="col-md-6">
+            <a href="#" data-abc="true">
+              <span class="ml-auto view-all"></span>
+            </a>
+          </div>
+      </div>
+    </div>    
+  </div>
+  {% else %}
+      <li> Auction not found </li>
+  {% endif %} 
 
   {% if item %}
-      <div class="card h-60 mb-3">
-        <img class="card-img-top img-thumbnail" src="{{ MEDIA_URL}}{{ item.item_image.url }}" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title text-truncate">{{ item.item_name }}</h5>
-          <p class="card-text text-truncate">{{ item.item_description }}</p>
-          <div class="container">
-            <div class="row">
-                <div class="col">
-                  <p><strong>${{ item.item_bid }}</strong></p>
-                </div>
-                <div class="col text-muted text-right">
-                  <p><strong> bids</strong></p>
-                </div>
-              <div class="w-100"></div>
-            </div>
-          </div>
-        </div>            
-        <div class="card-footer">
-          <small class="text-muted">Created {{ item.created }}</small>
-          <small class="text-danger">Expires {{ item.expires }}</small>
-        </div>        
-      </div>
+      
     </div>
   {% else %}
       <li> No auction item </li>

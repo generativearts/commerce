@@ -7,18 +7,18 @@
       
         <div class="col-3">
           <div class="card h-120 my-1 text-dark">
-            <a class="text-dark" href="p/{{ item.item_id }}">
+            <a class="text-dark" href="p/{{ item.item_UUID }}">
               {% if item.item_image %}
                 <img class="card-img-top img-fluid"
                   src="{{ MEDIA_URL}}{{ item.item_image.url }}"
-                  href="p/{{ item.item_id }}"
+                  href="p/{{ item.item_UUID }}"
                   alt="Card image cap">
               {% else %}
                 <img class="card-img-top img-thumbnail" src="https://fakeimg.pl/350x350/?text=No Photo&font=lobster">
               {% endif %}  
             </a>          
             <div class="card-body">
-              <a class="text-dark" href="p/{{ item.item_id }}">
+              <a class="text-dark" href="p/{{ item.item_UUID }}">
                 <h5 class="card-title card-link text-truncate">{{ item.item_name }}</h5>
               </a>
               <p class="card-text text-truncate">{{ item.item_description }}</p>
@@ -34,7 +34,7 @@
                 </div>
               </div>
             </div>
-            <a class="btn btn-primary" href="p/{{ item.item_id }}" role="button">Make bids</a>            
+            <a class="btn btn-primary" href="p/{{ item.item_UUID }}" role="button">Make bids</a>            
             <div class="card-footer">              
               <small class="text-muted">Created {{ item.created }}</small>
               <small class="text-danger">Expires {{ item.expires }}</small>

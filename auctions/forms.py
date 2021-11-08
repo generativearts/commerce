@@ -54,8 +54,35 @@ class NewItemForm(forms.Form):
                                 "class": "custom-file-input",
                                 "accept": "image/*",
                             }, ))
-    
 
+
+class AddBidForm(forms.Form):
+    item_bid = forms.DecimalField(required=True, 
+                        widget=forms.NumberInput(
+                            attrs={"id": "item_description",
+                                "name": "item_description",
+                                "class": "form-control w-25",
+                                "inputmode": "decimal",
+                                'placeholder': 0.00,
+                                'min': 0,
+                                'step': 1,
+                                'title': "Place Your bid here"
+                            }, ))
+
+
+class CommentForm(forms.Form):
+    item_description = forms.CharField(required=True, 
+                        widget=forms.Textarea(
+                            attrs={'value': '',
+                                    "id": "item_description",
+                                    "name": "item_description",
+                                    "rows": 10,
+                                    "class": "form-control",
+                                    'placeholder': 'Place description here',
+                                    'maxlength': Item.item_description.field.max_length,
+                                    }))
+
+                                    
 """ class NewItemForm(forms.Form):
     item_name = forms.CharField(required=True, 
                         widget=forms.TextInput(
@@ -66,15 +93,6 @@ class NewItemForm(forms.Form):
                                 "aria-describedby": "item_name",
                                 'required': 'true',
                                 'placeholder': 'Some like Iphone 12'}))
-    item_text = forms.CharField(
-                        widget=forms.Textarea(
-                            attrs={'value': '',
-                                    "id": "item_description",
-                                    "name": "item_description",
-                                    "rows": 10,
-                                    "class": "form-control",
-                                    'required': 'true',
-                                    'placeholder': 'Place description here'})) 
                                     
     def __init__(self, *args, **kwargs):
         super(NewItemForm, self).__init__(*args, **kwargs)

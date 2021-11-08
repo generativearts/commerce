@@ -3,9 +3,14 @@ from django.db import models
 from django.utils.html import mark_safe
 
 from datetime import datetime, timedelta
+from random import randrange
+import uuid
 import os
 from sorl.thumbnail import ImageField
 
+
+ITEM_CODE_MAX_TRIES = 32
+CHARSET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
 
 def path_and_rename(instance, filename):
     upload_to = 'auctions/static/itemimage'
@@ -32,6 +37,7 @@ class Category(models.Model):
 
 class Item(models.Model):
     item_id = models.AutoField(primary_key=True)
+    item_UUID = models.UUIDField(default=uuid.uuid4, max_length=36, editable=False, null= True, unique=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)    
     item_name = models.CharField(max_length=255, blank=False, null=False,
                             help_text="Enter a short description of the item")
@@ -50,7 +56,24 @@ class Item(models.Model):
 
 
     def __str__(self):
-        return f'{self.item_id}: {self.item_name}' 
+        return f'{self.item_id}: {self.item_UUID}: {self.item_name}' 
+
+    '''def save(self, *args, **kwargs):
+        """
+        https://github.com/workmajj/django-unique-random/blob/master/unique_random/models.py
+        """
+        loop_num = 0
+        unique = False
+        while not unique:
+            if loop_num < ITEM_CODE_MAX_TRIES:
+                new_code = str(uuid.uuid4())
+                if not Item.objects.filter(item_code=new_code):
+                    self.item_code = new_code
+                    unique = True
+                loop_num += 1
+            else:
+                raise ValueError("Couldn't generate a unique code.")
+        super(Item, self).save(*args, **kwargs)'''
 
 
 class Bid(models.Model):

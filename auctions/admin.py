@@ -9,6 +9,11 @@ admin.site.register(Item)
 admin.site.register(Category)
 
 
+""" @admin.register(Item)
+class UniversalAdmin(admin.ModelAdmin):
+    def get_list_display(self, request):
+        return [field.name for field in self.model._meta.concrete_fields] """
+
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('user', 'item', 'body', 'created_on', 'active')
