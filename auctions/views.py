@@ -11,6 +11,7 @@ from .models import User
 from .models import Comment
 from .models import Item
 from .models import Category
+from .models import Bid
 from .forms import CommentForm, NewItemForm
 
 
@@ -40,7 +41,11 @@ def new_item(request):
                 obj.item_name = form.cleaned_data.get('item_name')
                 obj.item_description = form.cleaned_data.get('item_description')
                 obj.item_category = form.cleaned_data.get('item_category')
-                obj.item_bid = form.cleaned_data.get('item_bid')
+                bid = Bid()
+                bid.user = request.user
+                bid.bid = form.cleaned_data.get('item_bid')
+                bid.save()
+                obj.item_bid = bid
                 obj.item_image = form.cleaned_data.get('item_image')
                 
                 '''instance = Item(item_image=request.FILES['item_image'])
