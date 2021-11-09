@@ -4,9 +4,11 @@ from django.contrib import admin
 from .models import Comment
 from .models import Category
 from .models import Item
+from .models import Bid
 
 admin.site.register(Item)
 admin.site.register(Category)
+admin.site.register(Bid)
 
 
 """ @admin.register(Item)

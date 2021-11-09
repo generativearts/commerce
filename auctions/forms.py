@@ -8,6 +8,19 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ('user', 'item', 'body')
 
+
+class MakeBidForm(forms.Form):
+    bid = forms.DecimalField(required=True, 
+                        widget=forms.NumberInput(
+                            attrs={"id": "new_bid",
+                                "name": "new_bid",
+                                "class": "form-control w-100",
+                                "inputmode": "decimal",
+                                'placeholder': 0.00,
+                                'min': 0,
+                                'step': 1,
+                                'title': "Place Your bid here"
+                            }, ))
 class NewItemForm(forms.Form):
     item_name = forms.CharField(required=True,
                         widget=forms.TextInput(

@@ -49,7 +49,8 @@ class Item(models.Model):
                         height_field=None, width_field=None, max_length=200)
     item_category = models.ForeignKey(Category, on_delete=models.CASCADE)
     item_start_price = models.DecimalField(max_digits=20, decimal_places=2, default=0.0, blank=True, null=True,)
-    item_bid = models.DecimalField(max_digits=20, decimal_places=2, default=0.0)
+    item_current_price = models.DecimalField(max_digits=20, decimal_places=2, default=0.0)
+    item_bids_count = models.IntegerField(default=0)
     #item_bid = models.ForeignKey(Bid, on_delete=models.CASCADE)
 
     created = models.DateTimeField(editable=False, null=True,
@@ -82,14 +83,14 @@ class Item(models.Model):
 class Bid(models.Model):
     bid_id = models.AutoField(primary_key=True)
     bid = models.DecimalField(max_digits=20, decimal_places=2,
-                                default=0.0)
+                                default=0.0, null= True, blank=True,)
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     created = models.DateTimeField(editable=False, null=True,
                                 auto_now_add=True)
     def __str__(self):
-        return f'{self.bid}'
+        return f'{self.user}: bid {self.bid} at {self.created}'
 
 
 

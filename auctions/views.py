@@ -12,7 +12,7 @@ from .models import Comment
 from .models import Item
 from .models import Category
 from .models import Bid
-from .forms import CommentForm, NewItemForm
+from .forms import CommentForm, NewItemForm, MakeBidForm
 
 
 def index(request, category=None):
@@ -34,7 +34,7 @@ def new_item(request):
         if request.method == "POST":
             form = NewItemForm(request.POST, request.FILES)
             print('request.FILES', request.FILES)
-            if form.is_valid():              
+            if form.is_valid():             
 
                 obj = Item(item_image=request.FILES['item_image'])
                 obj.user = request.user
@@ -67,17 +67,42 @@ def new_item(request):
 
 
 def item_page(request, item_UUID=None):
+    if item_UUID:
+        item = Item.objects.get(item_UUID=item_UUID)
+        item_bids = Bid.objects.filter(item=item).order_by('created').reverse()
+        current_price = float(item_bids[0].bid) if len(item_bids)>0 else float(item.item_start_price)
+        bids_total = len(item_bids) if len(item_bids)>0 else 0
+        print('current_price', current_price)
+        print('item_bids', item_bids)
     if request.user.is_authenticated:
         if request.method == "POST":
-            form = NewItemForm(request.POST)
+            user = request.user
+            form = MakeBidForm(request.POST)
             if form.is_valid():
-                obj = Item()
-                obj.user = request.user
-        else:
-            item = Item.objects.get(item_UUID=item_UUID)
-            context = {'item': item,}
-            return render(request, "auctions/item.html",
-                    context)
+                new_bid = form.cleaned_data.get('bid')
+                if new_bid > current_price:                    
+                    obj = Bid()
+                    obj.user = user
+                    obj.item = item
+                    obj.bid = new_bid
+                    obj.save()
+                    item.item_current_price = new_bid
+                    item.item_bids_count = bids_total + 1
+                    item.save()
+                    messages.success(request, 'Your bid accepted')
+                else:
+                    messages.error(request, 'Your bid not accepted')
+        item_bids = Bid.objects.filter(item=item).order_by('created').reverse()
+        current_price = float(item_bids[0].bid) if len(item_bids)>0 else float(item.item_start_price)
+        bids_total = len(item_bids) if len(item_bids)>0 else 0
+        recomended_price = current_price + .01
+        context = {'item': item,
+                'current_price': current_price,
+                'recomended_price': recomended_price,
+                'bids_total':bids_total,
+                'bid_form': MakeBidForm}
+        return render(request, "auctions/item.html",
+                context)
     else:
         messages.error(request, 'You are not signed')
         return render(request, "auctions/login.html")

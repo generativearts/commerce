@@ -36,7 +36,7 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     {% for c in categoryes %}
-                    <a class="dropdown-item" href="category/{{ c.category}}">{{ c.category }}</a>
+                    <a class="dropdown-item" href="{% url 'index' %}category/{{ c.category}}">{{ c.category }}</a>
                     {% endfor %}
                     <a class="dropdown-item" href="#">Another action</a>
                     <div class="dropdown-divider"></div>

@@ -22,34 +22,38 @@
               <span class="product_price">${{ item.item_bid }}</span> <strike class="product_discount"> <span style='color:black'>₹ 2,000<span> </strike>
             </div>
             <hr class="singleline">
-            <form class="form-inline">
+            
               <div class="container jumbotron">
                 <div class="row">
-                  <div class="col-md-3 col-sm">
-                    <p><strong>Current bid:</strong></p>
+                  <div class="col-md-4 col-sm">
+                    <p><strong>Current price:</strong></p>
                   </div>
                   <div class="col-md-4 col-sm">
-                    <p><strong>${{ item.item_bid }}</strong></p>
+                    <p><strong>${{ current_price }}</strong></p>
                   </div>
                   <div class="col-md-4 col-sm">
-                    <p><strong>[bids]</strong></p>
+                    <p><strong>[{{ bids_total }} bids]</strong></p>
                   </div>
                 </div>
+
+                <form method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
                 <div class="row">
-                  <div class="col-md-3 col-sm">
+                  <div class="col-md-4 col-sm">
                   </div>
                   <div class="col-md-4 col-sm">
-                    <input class="form-control w-100" type="text" placeholder="Default input">
+                    {{ bid_form.bid |safe}}
                   </div>
                   <div class="col-md-4 col-sm">
                     <button type="submit" class="btn btn-primary mb-2">Place bid</button>
                   </div>
                 </div>
+              </form> 
                 <div class="row">
-                  <div class="col-md-3 col-sm">
+                  <div class="col-md-4 col-sm">
                   </div>
                   <div class="col-md-4 col-sm">
-                    <p><small>Enter US ${{ item.item_bid|add:1.00 }} or more</small></p>
+                    <p><small>Enter US ${{ recomended_price }} or more</small></p>
                   </div>
                   <div class="col-md-4 col-sm">
                     <button class="btn btn-success">
@@ -58,7 +62,7 @@
                   </div>
                 </div>
               </div>
-            </form>          
+                     
               
           </div>
         </div>
