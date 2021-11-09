@@ -5,10 +5,12 @@ from .models import Comment
 from .models import Category
 from .models import Item
 from .models import Bid
+from .models import Favorite
 
 admin.site.register(Item)
 admin.site.register(Category)
 admin.site.register(Bid)
+admin.site.register(Favorite)
 
 
 """ @admin.register(Item)

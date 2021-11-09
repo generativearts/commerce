@@ -45,7 +45,7 @@
                     {{ bid_form.bid |safe}}
                   </div>
                   <div class="col-md-4 col-sm">
-                    <button type="submit" class="btn btn-primary mb-2">Place bid</button>
+                    <button type="submit" class="btn btn-primary mb-2 w-100"><strong>Place bid</strong></button>
                   </div>
                 </div>
               </form> 
@@ -56,9 +56,12 @@
                     <p><small>Enter US ${{ recomended_price }} or more</small></p>
                   </div>
                   <div class="col-md-4 col-sm">
-                    <button class="btn btn-success">
-                      <i class="fas fa-star"></i>
-                    </button> 
+                    <form form id="add_to_favorites" method="post" action="{% url 'add_to_favorites' item_UUID=item.item_UUID %} ">
+                      {% csrf_token %}
+                      <button id="fav_button" class="btn btn-{% if favorite %}success{% else %}secondary{% endif %} w-100" type="submit">
+                        <i class="fas fa-star"></i><strong> Favorite</strong>
+                      </button> 
+                    </form> 
                   </div>
                 </div>
               </div>
@@ -98,6 +101,35 @@
   {% else %}
       <li> No auction item </li>
   {% endif %}        
-      
+
+  <!-- Favorite button script -->
+  <script>
+    $("#add_to_favorites").on('submit', function(event) {
+      event.preventDefault(); 
+      var UUID = '{{ item.UUID }}';
+
+      // the button instance that was clicked
+      var clickedBtn = $("#fav_button");
+
+      $.ajax({
+          type: "POST",
+          url: "{% url 'add_to_favorites' item_UUID=item.item_UUID %}",
+          data:{
+              UUID:UUID, 
+              'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+          },
+          datatype:'json',
+          success: function(data) {
+            if (data['success'])
+            if (clickedBtn.hasClass('btn-secondary'))
+              clickedBtn.removeClass('btn-secondary')
+                      .addClass('btn-success')
+            else
+            clickedBtn.removeClass('btn-success')
+                    .addClass('btn-secondary')
+          }
+      }); 
+    });
+  </script>
 
 {% endblock %}

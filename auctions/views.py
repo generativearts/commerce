@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
@@ -12,6 +12,7 @@ from .models import Comment
 from .models import Item
 from .models import Category
 from .models import Bid
+from .models import Favorite
 from .forms import CommentForm, NewItemForm, MakeBidForm
 
 
@@ -96,9 +97,11 @@ def item_page(request, item_UUID=None):
         current_price = float(item_bids[0].bid) if len(item_bids)>0 else float(item.item_start_price)
         bids_total = len(item_bids) if len(item_bids)>0 else 0
         recomended_price = current_price + .01
+        favorite = True if Favorite.objects.filter(item=item) else False
         context = {'item': item,
                 'current_price': current_price,
                 'recomended_price': recomended_price,
+                'favorite': favorite,
                 'bids_total':bids_total,
                 'bid_form': MakeBidForm}
         return render(request, "auctions/item.html",
@@ -106,6 +109,25 @@ def item_page(request, item_UUID=None):
     else:
         messages.error(request, 'You are not signed')
         return render(request, "auctions/login.html")
+
+
+def add_to_favorites(request, item_UUID=None):
+    #item_UUID = request.POST.get('userbooks')
+    if request.method == 'POST':
+        print("add_to_watchlist")
+        auction_to_add = Item.objects.get(item_UUID=item_UUID)
+        print('auction_to_add', auction_to_add)
+        watchlist = Favorite.objects.get(user=request.user)
+        print('watchlist')
+        print('watchlist', watchlist)
+        if auction_to_add in watchlist.item.all():
+            watchlist.item.remove(auction_to_add)
+            watchlist.save()
+            return JsonResponse({'success':True})
+        else:
+            watchlist.item.add(auction_to_add)
+            watchlist.save()
+            return JsonResponse({'success':True})
 
 
 def login_view(request):
