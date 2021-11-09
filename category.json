@@ -1,0 +1,23 @@
+[
+    {
+      "model": "auctions.Category",
+      "pk": 1,
+      "fields": {
+        "name": "Notebooks"
+      }
+    },
+    {
+      "model": "auctions.Category",
+      "pk": 2,
+      "fields": {
+        "name": "Photo & Video"
+      }
+    },
+    {
+      "model": "auctions.Category",
+      "pk": 3,
+      "fields": {
+        "name": "Phones"
+      }
+    }
+  ]
