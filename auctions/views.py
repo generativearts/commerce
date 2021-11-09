@@ -15,11 +15,16 @@ from .models import Bid
 from .forms import CommentForm, NewItemForm
 
 
-def index(request):
-    items = Item.objects.order_by('expires')
-    for item in items:
-        print(item)
-    context = {'items': items,}
+def index(request, category=None):
+    categoryes = Category.objects.all()
+    if category:
+        category = get_object_or_404(Category, category=category)
+        items = Item.objects.filter(item_category=category)
+    else:
+        items = Item.objects.order_by('expires')    
+    context = {'items': items,
+                'categoryes': categoryes,
+                'category': category}
     return render(request, "auctions/index.html", context)
 
 
@@ -29,27 +34,16 @@ def new_item(request):
         if request.method == "POST":
             form = NewItemForm(request.POST, request.FILES)
             print('request.FILES', request.FILES)
-            if form.is_valid():
-                print('item_name', form.cleaned_data.get('item_name'),
-                        'item_description', form.cleaned_data.get('item_description'),
-                        "item_category", form.cleaned_data.get('item_category'),
-                        'ittem_bid', form.cleaned_data.get('item_bid'),
-                        'item_image', form.cleaned_data.get('item_image'),
-                        )
+            if form.is_valid():              
+
                 obj = Item(item_image=request.FILES['item_image'])
                 obj.user = request.user
                 obj.item_name = form.cleaned_data.get('item_name')
                 obj.item_description = form.cleaned_data.get('item_description')
-                obj.item_category = form.cleaned_data.get('item_category')
-                bid = Bid()
-                bid.user = request.user
-                bid.bid = form.cleaned_data.get('item_bid')
-                bid.save()
-                obj.item_bid = bid
-                obj.item_image = form.cleaned_data.get('item_image')
-                
-                '''instance = Item(item_image=request.FILES['item_image'])
-                instance.save()'''
+                obj.item_category = form.cleaned_data.get('item_category') 
+                obj.item_start_price = form.cleaned_data.get('item_start_price')
+                #obj.item_bid = form.cleaned_data.get('item_bid')
+                obj.item_image = form.cleaned_data.get('item_image')                
                 obj.save()
                 messages.success(request, 'New Auction Created')
             else:

@@ -38,7 +38,7 @@ class NewItemForm(forms.Form):
                                 "id": "item_category",
                                 "name": "item_category",
                             }), )
-    item_bid = forms.DecimalField(required=True, 
+    item_start_price = forms.DecimalField(required=True, 
                         widget=forms.NumberInput(
                             attrs={"id": "item_description",
                                 "name": "item_description",
@@ -85,7 +85,7 @@ class CommentForm(forms.Form):
                                     'maxlength': Item._meta.get_field('item_description').max_length,
                                     }))
 
-                                    
+
 """ class NewItemForm(forms.Form):
     item_name = forms.CharField(required=True, 
                         widget=forms.TextInput(

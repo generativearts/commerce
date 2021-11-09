@@ -29,23 +29,12 @@ class User(AbstractUser):
 
 class Category(models.Model):
     category_id = models.AutoField(primary_key=True, editable=False)
-    name = models.CharField(max_length=200)
+    category = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.name
+        return self.category
 
 
-class Bid(models.Model):
-    bid_id = models.AutoField(primary_key=True)
-    bid = models.DecimalField(max_digits=20, decimal_places=2,
-                                default=0.0)
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    #item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    created = models.DateTimeField(editable=False, null=True,
-                                auto_now_add=True)
-    def __str__(self):
-        return f'{self.bid}'
 
 class Item(models.Model):
     item_id = models.AutoField(primary_key=True)
@@ -59,10 +48,9 @@ class Item(models.Model):
                         null= True, blank=True,
                         height_field=None, width_field=None, max_length=200)
     item_category = models.ForeignKey(Category, on_delete=models.CASCADE)
-     
-    '''item_bid = models.DecimalField(max_digits=20, decimal_places=2,
-                                default=0.0)'''
-    item_bid = models.ForeignKey(Bid, on_delete=models.CASCADE)
+    item_start_price = models.DecimalField(max_digits=20, decimal_places=2, default=0.0, blank=True, null=True,)
+    item_bid = models.DecimalField(max_digits=20, decimal_places=2, default=0.0)
+    #item_bid = models.ForeignKey(Bid, on_delete=models.CASCADE)
 
     created = models.DateTimeField(editable=False, null=True,
                                 auto_now_add=True)
@@ -91,7 +79,17 @@ class Item(models.Model):
         super(Item, self).save(*args, **kwargs)'''
 
 
-
+class Bid(models.Model):
+    bid_id = models.AutoField(primary_key=True)
+    bid = models.DecimalField(max_digits=20, decimal_places=2,
+                                default=0.0)
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    created = models.DateTimeField(editable=False, null=True,
+                                auto_now_add=True)
+    def __str__(self):
+        return f'{self.bid}'
 
 
 
