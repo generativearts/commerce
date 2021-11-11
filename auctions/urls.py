@@ -10,7 +10,8 @@ urlpatterns = [
     path("new_item", views.new_item, name="new_item"),
     path("p/<str:item_UUID>", views.item_page, name="item_page"),
     path("add_to_favorites/<str:item_UUID>", views.add_to_favorites, name="add_to_favorites"),
-    path("category", views.index, name="item_page"),
-    path("category/<str:category>", views.index, name="item_page"),
+    path("favorites", views.favorites, name="favorites"),
+    path("category", views.index, name="category"),
+    path("category/<str:category>", views.index, name="index"),
     #path('<slug:slug>/', views.post_detail, name='post_detail'),
 ]

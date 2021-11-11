@@ -16,10 +16,13 @@ from .models import Favorite
 from .forms import CommentForm, NewItemForm, MakeBidForm
 
 
-def index(request, category=None):
+def index(request, category=None, favorite=None):
     categoryes = Category.objects.all()
     if category:
         category = get_object_or_404(Category, category=category)
+        items = Item.objects.filter(item_category=category)
+    elif category:
+        favorite = get_object_or_404(Category, category=category)
         items = Item.objects.filter(item_category=category)
     else:
         items = Item.objects.order_by('expires')    
@@ -29,6 +32,11 @@ def index(request, category=None):
     return render(request, "auctions/index.html", context)
 
 
+def favorites(request, favorite=None):
+    if favorite:
+        return index(request, favorite)
+    else:
+        return index(request)
 
 def new_item(request):
     if request.user.is_authenticated:
@@ -115,18 +123,14 @@ def add_to_favorites(request, item_UUID=None):
     #item_UUID = request.POST.get('userbooks')
     if request.method == 'POST':
         print("add_to_watchlist")
-        auction_to_add = Item.objects.get(item_UUID=item_UUID)
-        print('auction_to_add', auction_to_add)
-        watchlist = Favorite.objects.get(user=request.user)
-        print('watchlist')
-        print('watchlist', watchlist)
-        if auction_to_add in watchlist.item.all():
-            watchlist.item.remove(auction_to_add)
-            watchlist.save()
+        item = Item.objects.get(item_UUID=item_UUID)
+        if Favorite.objects.filter(user=request.user, item=item):
+            fav = Favorite.objects.get(user=request.user, item=item)
+            fav.delete()
             return JsonResponse({'success':True})
         else:
-            watchlist.item.add(auction_to_add)
-            watchlist.save()
+            fav = Favorite(user=request.user, item=item)
+            fav.save()
             return JsonResponse({'success':True})
 
 

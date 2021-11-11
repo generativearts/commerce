@@ -37,7 +37,7 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     {% for c in categoryes %}
-                    <a class="dropdown-item" href="{% url 'index' %}category/{{ c.category}}">{{ c.category }}</a>
+                    <a class="dropdown-item" href="{% url 'category' %}/{{ c.category}}">{{ c.category }}</a>
                     {% endfor %}
                     <a class="dropdown-item" href="#">Another action</a>
                     <div class="dropdown-divider"></div>
@@ -45,7 +45,7 @@
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'index' %}favorites/">Favorites</a>
+                  <a class="nav-link" href="{% url 'favorites' %}">Favorites</a>
                 </li> 
                 <li class="nav-item">
                   <a class="nav-link disabled" href="#">Disabled</a>
