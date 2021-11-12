@@ -25,8 +25,10 @@ def index(request, category=None, favorite=None):
         items = Item.objects.filter(item_category=category)
         page_head = category
     if favorite:
+        
         if request.user:
-            items = Favorite.objects.filter(user=request.user).order_by('expires') 
+            items_list = list(item.item.item_UUID for item in Favorite.objects.filter(user=request.user))
+            items = Item.objects.filter(item_UUID__in=items_list)
             page_head = "Favorites"
     context = {'items': items,
                 'page_head': page_head or None,
@@ -36,7 +38,7 @@ def index(request, category=None, favorite=None):
 
 def favorites(request, favorite=True):
     if favorite:
-        return index(request, favorite)
+        return index(request, favorite=favorite)
     else:
         return index(request)
 
