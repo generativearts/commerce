@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-  <h2>Active Listings {% if category%} in {{category}} {% endif %}</h2>
+  <h2>Active Listings {% if page_head %} in {{page_head}} {% endif %}</h2>
     <div class="card-deck container-fluid">
       {% for item in items %}
       

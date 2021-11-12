@@ -17,22 +17,24 @@ from .forms import CommentForm, NewItemForm, MakeBidForm
 
 
 def index(request, category=None, favorite=None):
+    page_head = None
+    items = Item.objects.order_by('expires') 
     categoryes = Category.objects.all()
     if category:
         category = get_object_or_404(Category, category=category)
         items = Item.objects.filter(item_category=category)
-    elif category:
-        favorite = get_object_or_404(Category, category=category)
-        items = Item.objects.filter(item_category=category)
-    else:
-        items = Item.objects.order_by('expires')    
+        page_head = category
+    if favorite:
+        if request.user:
+            items = Favorite.objects.filter(user=request.user).order_by('expires') 
+            page_head = "Favorites"
     context = {'items': items,
-                'categoryes': categoryes,
-                'category': category}
+                'page_head': page_head or None,
+                'categoryes': categoryes}
     return render(request, "auctions/index.html", context)
 
 
-def favorites(request, favorite=None):
+def favorites(request, favorite=True):
     if favorite:
         return index(request, favorite)
     else:
